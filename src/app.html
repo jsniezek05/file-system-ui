@@ -1,20 +1,26 @@
 <template>
   <require from="./style.css"></require>
-  <ul>
-    <li repeat.for="item of data">
-      <a click.trigger="readFile(item)">
-        ${item.name}, ${item.type}, ${item.bc}
-      </a>
-    </li>
-  </ul>
-  <ul>
-    <li repeat.for="item of object">
-      <a click.trigger="readFile(item)">
-        ${item.name}, ${item.type}, ${item.bc}
-      </a>
-    </li>
-  </ul>
-  <div>
+
+  <div class="dir">
+    <ul>
+      <li repeat.for="item of data">
+        <a click.trigger="readFile(item)">
+          ${item.name}, ${item.type}, ${item.bc}
+        </a>
+      </li>
+    </ul>
+  </div>
+  <div class="dir2">
+    <ul>
+      <li repeat.for="item of object">
+        <a click.trigger="readFile(item)">
+          ${item.name}, ${item.type}, ${item.bc}
+        </a>
+      </li>
+    </ul>
+  </div>
+  <div class="file">
     ${file}
   </div>
+
 </template>

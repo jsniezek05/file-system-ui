@@ -1,6 +1,28 @@
 body {
   margin: 0;
   padding: 0;
+  display: flex;
+}
+body .dir {
+  height: 100vh;
+  width: 300px;
+  background-color: #808080;
+  overflow: scroll;
+  border: 1px solid #000;
+}
+body .dir2 {
+  height: 100vh;
+  width: 300px;
+  background-color: #808080;
+  overflow: scroll;
+  border: 1px solid #000;
+}
+body .file {
+  height: 100vh;
+  width: 300px;
+  background-color: #808080;
+  overflow: scroll;
+  border: 1px solid #000;
 }
 body ul {
   list-style: none;
