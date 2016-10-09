@@ -1,12 +1,29 @@
 <template>
   <require from="./style.css"></require>
-  <require from="./resources/elements/file-browser"></require>
-  <h3>Directory</h3>
+
   <div class="dir">
-    <file-browser data.bind="data" current-file.bind="currentFile"></file-browser>
-    <div id="code"></div>
-    <div class="content-area" if.bind="false">
-      ${currentFile.content}
-    </div>
+    <h3>Directory</h3>
+    <ul>
+      <li repeat.for="item of data">
+        <a click.trigger="readFile(item)">
+          <i class="material-icons">${item.type}</i>${item.name}, ${item.type}, ${item.bc}
+        </a>
+      </li>
+    </ul>
   </div>
+  <div class="dir2">
+    <h3>Directory</h3>
+    <ul>
+      <li repeat.for="item of object">
+        <a click.trigger="readFile(item)">
+          <i class="material-icons">${item.type}</i>${item.name}, ${item.type}, ${item.bc}
+        </a>
+      </li>
+    </ul>
+  </div>
+  <div class="file">
+    <h3>File</h3>
+    ${file}
+  </div>
+
 </template>
