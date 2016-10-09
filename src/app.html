@@ -2,24 +2,27 @@
   <require from="./style.css"></require>
 
   <div class="dir">
+    <h3>Directory</h3>
     <ul>
       <li repeat.for="item of data">
         <a click.trigger="readFile(item)">
-          ${item.name}, ${item.type}, ${item.bc}
+          <i class="material-icons">${item.type}</i>${item.name}, ${item.type}, ${item.bc}
         </a>
       </li>
     </ul>
   </div>
   <div class="dir2">
+    <h3>Directory</h3>
     <ul>
       <li repeat.for="item of object">
         <a click.trigger="readFile(item)">
-          ${item.name}, ${item.type}, ${item.bc}
+          <i class="material-icons">${item.type}</i>${item.name}, ${item.type}, ${item.bc}
         </a>
       </li>
     </ul>
   </div>
   <div class="file">
+    <h3>File</h3>
     ${file}
   </div>
 

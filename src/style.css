@@ -2,6 +2,8 @@ body {
   margin: 0;
   padding: 0;
   display: flex;
+i
+  color: #fff;
 }
 body .dir {
   height: 100vh;

@@ -15,7 +15,7 @@ export class App {
     this.type = item.type;
     console.log(this.item);
 
-    if(this.type === 'directory'){
+    if(this.type === 'folder'){
       let client = new HttpClient;
       client.get(`http://localhost:3001/directory/${this.item}`)
         .then(data => {

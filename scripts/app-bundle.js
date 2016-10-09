@@ -31,7 +31,7 @@ define('app',['exports', 'aurelia-http-client'], function (exports, _aureliaHttp
       this.type = item.type;
       console.log(this.item);
 
-      if (this.type === 'directory') {
+      if (this.type === 'folder') {
         var client = new _aureliaHttpClient.HttpClient();
         client.get('http://localhost:3001/directory/' + this.item).then(function (data) {
           _this2.object = JSON.parse(data.response);
@@ -105,6 +105,6 @@ define('resources/index',["exports"], function (exports) {
   exports.configure = configure;
   function configure(config) {}
 });
-define('text!app.html', ['module'], function(module) { module.exports = "<template>\n  <require from=\"./style.css\"></require>\n\n  <div class=\"dir\">\n    <ul>\n      <li repeat.for=\"item of data\">\n        <a click.trigger=\"readFile(item)\">\n          ${item.name}, ${item.type}, ${item.bc}\n        </a>\n      </li>\n    </ul>\n  </div>\n  <div class=\"dir2\">\n    <ul>\n      <li repeat.for=\"item of object\">\n        <a click.trigger=\"readFile(item)\">\n          ${item.name}, ${item.type}, ${item.bc}\n        </a>\n      </li>\n    </ul>\n  </div>\n  <div class=\"file\">\n    ${file}\n  </div>\n\n</template>\n"; });
-define('text!style.css', ['module'], function(module) { module.exports = "body {\n  margin: 0;\n  padding: 0;\n  display: flex;\n}\nbody .dir {\n  height: 100vh;\n  width: 300px;\n  background-color: #808080;\n  overflow: scroll;\n  border: 1px solid #000;\n}\nbody .dir2 {\n  height: 100vh;\n  width: 300px;\n  background-color: #808080;\n  overflow: scroll;\n  border: 1px solid #000;\n}\nbody .file {\n  height: 100vh;\n  width: 300px;\n  background-color: #808080;\n  overflow: scroll;\n  border: 1px solid #000;\n}\nbody ul {\n  list-style: none;\n  padding-left: 0;\n}\n"; });
+define('text!app.html', ['module'], function(module) { module.exports = "<template>\n  <require from=\"./style.css\"></require>\n\n  <div class=\"dir\">\n    <h3>Directory</h3>\n    <ul>\n      <li repeat.for=\"item of data\">\n        <a click.trigger=\"readFile(item)\">\n          <i class=\"material-icons\">${item.type}</i>${item.name}, ${item.type}, ${item.bc}\n        </a>\n      </li>\n    </ul>\n  </div>\n  <div class=\"dir2\">\n    <h3>Directory</h3>\n    <ul>\n      <li repeat.for=\"item of object\">\n        <a click.trigger=\"readFile(item)\">\n          <i class=\"material-icons\">${item.type}</i>${item.name}, ${item.type}, ${item.bc}\n        </a>\n      </li>\n    </ul>\n  </div>\n  <div class=\"file\">\n    <h3>File</h3>\n    ${file}\n  </div>\n\n</template>\n"; });
+define('text!style.css', ['module'], function(module) { module.exports = "body {\n  margin: 0;\n  padding: 0;\n  display: flex;\ni\n  color: #fff;\n}\nbody .dir {\n  height: 100vh;\n  width: 300px;\n  background-color: #808080;\n  overflow: scroll;\n  border: 1px solid #000;\n}\nbody .dir2 {\n  height: 100vh;\n  width: 300px;\n  background-color: #808080;\n  overflow: scroll;\n  border: 1px solid #000;\n}\nbody .file {\n  height: 100vh;\n  width: 300px;\n  background-color: #808080;\n  overflow: scroll;\n  border: 1px solid #000;\n}\nbody ul {\n  list-style: none;\n  padding-left: 0;\n}\n"; });
 //# sourceMappingURL=app-bundle.js.map
