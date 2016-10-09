@@ -12,40 +12,18 @@ define('app',['exports', 'aurelia-http-client'], function (exports, _aureliaHttp
     }
   }
 
-  var App = exports.App = function () {
-    function App() {
-      var _this = this;
+  var App = exports.App = function App() {
+    var _this = this;
 
-      _classCallCheck(this, App);
+    _classCallCheck(this, App);
 
-      var client = new _aureliaHttpClient.HttpClient();
-      client.get('http://localhost:3001/').then(function (data) {
-        _this.data = JSON.parse(data.response);
-      });
-    }
+    this.currentFile = {};
 
-    App.prototype.readFile = function readFile(item) {
-      var _this2 = this;
-
-      this.item = JSON.stringify(item);
-      this.type = item.type;
-      console.log(this.item);
-
-      if (this.type === 'folder') {
-        var client = new _aureliaHttpClient.HttpClient();
-        client.get('http://localhost:3001/directory/' + this.item).then(function (data) {
-          _this2.object = JSON.parse(data.response);
-        });
-      } else {
-        var _client = new _aureliaHttpClient.HttpClient();
-        _client.get('http://localhost:3001/read/' + this.item).then(function (data) {
-          _this2.file = data.response;
-        });
-      }
-    };
-
-    return App;
-  }();
+    this.client = new _aureliaHttpClient.HttpClient();
+    this.client.get('http://localhost:3000/children').then(function (data) {
+      _this.data = JSON.parse(data.response);
+    });
+  };
 });
 define('environment',["exports"], function (exports) {
   "use strict";
@@ -105,6 +83,135 @@ define('resources/index',["exports"], function (exports) {
   exports.configure = configure;
   function configure(config) {}
 });
-define('text!app.html', ['module'], function(module) { module.exports = "<template>\n  <require from=\"./style.css\"></require>\n\n  <div class=\"dir\">\n    <h3>Directory</h3>\n    <ul>\n      <li repeat.for=\"item of data\">\n        <a click.trigger=\"readFile(item)\">\n          <i class=\"material-icons\">${item.type}</i>${item.name}, ${item.type}, ${item.bc}\n        </a>\n      </li>\n    </ul>\n  </div>\n  <div class=\"dir2\">\n    <h3>Directory</h3>\n    <ul>\n      <li repeat.for=\"item of object\">\n        <a click.trigger=\"readFile(item)\">\n          <i class=\"material-icons\">${item.type}</i>${item.name}, ${item.type}, ${item.bc}\n        </a>\n      </li>\n    </ul>\n  </div>\n  <div class=\"file\">\n    <h3>File</h3>\n    ${file}\n  </div>\n\n</template>\n"; });
-define('text!style.css', ['module'], function(module) { module.exports = "body {\n  margin: 0;\n  padding: 0;\n  display: flex;\ni\n  color: #fff;\n}\nbody .dir {\n  height: 100vh;\n  width: 300px;\n  background-color: #808080;\n  overflow: scroll;\n  border: 1px solid #000;\n}\nbody .dir2 {\n  height: 100vh;\n  width: 300px;\n  background-color: #808080;\n  overflow: scroll;\n  border: 1px solid #000;\n}\nbody .file {\n  height: 100vh;\n  width: 300px;\n  background-color: #808080;\n  overflow: scroll;\n  border: 1px solid #000;\n}\nbody ul {\n  list-style: none;\n  padding-left: 0;\n}\n"; });
+define('resources/elements/file-browser',['exports', 'aurelia-http-client', 'aurelia-framework', '../../code-mirror'], function (exports, _aureliaHttpClient, _aureliaFramework, _codeMirror) {
+  'use strict';
+
+  Object.defineProperty(exports, "__esModule", {
+    value: true
+  });
+  exports.FileBrowser = undefined;
+
+  function _initDefineProp(target, property, descriptor, context) {
+    if (!descriptor) return;
+    Object.defineProperty(target, property, {
+      enumerable: descriptor.enumerable,
+      configurable: descriptor.configurable,
+      writable: descriptor.writable,
+      value: descriptor.initializer ? descriptor.initializer.call(context) : void 0
+    });
+  }
+
+  function _classCallCheck(instance, Constructor) {
+    if (!(instance instanceof Constructor)) {
+      throw new TypeError("Cannot call a class as a function");
+    }
+  }
+
+  function _applyDecoratedDescriptor(target, property, decorators, descriptor, context) {
+    var desc = {};
+    Object['ke' + 'ys'](descriptor).forEach(function (key) {
+      desc[key] = descriptor[key];
+    });
+    desc.enumerable = !!desc.enumerable;
+    desc.configurable = !!desc.configurable;
+
+    if ('value' in desc || desc.initializer) {
+      desc.writable = true;
+    }
+
+    desc = decorators.slice().reverse().reduce(function (desc, decorator) {
+      return decorator(target, property, desc) || desc;
+    }, desc);
+
+    if (context && desc.initializer !== void 0) {
+      desc.value = desc.initializer ? desc.initializer.call(context) : void 0;
+      desc.initializer = undefined;
+    }
+
+    if (desc.initializer === void 0) {
+      Object['define' + 'Property'](target, property, desc);
+      desc = null;
+    }
+
+    return desc;
+  }
+
+  function _initializerWarningHelper(descriptor, context) {
+    throw new Error('Decorating class property failed. Please ensure that transform-class-properties is enabled.');
+  }
+
+  var _dec, _class, _desc, _value, _class2, _descriptor, _descriptor2;
+
+  var FileBrowser = exports.FileBrowser = (_dec = (0, _aureliaFramework.inject)(_codeMirror.CodeMirrorService), _dec(_class = (_class2 = function () {
+    function FileBrowser(codeMirrorService) {
+      _classCallCheck(this, FileBrowser);
+
+      _initDefineProp(this, 'data', _descriptor, this);
+
+      _initDefineProp(this, 'currentFile', _descriptor2, this);
+
+      this.client = new _aureliaHttpClient.HttpClient();
+      this.codeMirrorService = codeMirrorService;
+    }
+
+    FileBrowser.prototype.getChildren = function getChildren(item) {
+      var _this = this;
+
+      if (item.open) {
+        return item.open = false;
+      }
+      item.open = true;
+      this.client.get('http://localhost:3000/children?path=' + item.fullPath).then(function (data) {
+        return JSON.parse(data.response);
+      }).then(function (data) {
+        if (data.content) {
+          _this.currentFile.content = data.content;
+          _this.cm = _this.codeMirrorService.getInstance();
+          _this.cm.setValue(_this.currentFile.content);
+        } else {
+          item.children = data;
+        }
+      });
+    };
+
+    return FileBrowser;
+  }(), (_descriptor = _applyDecoratedDescriptor(_class2.prototype, 'data', [_aureliaFramework.bindable], {
+    enumerable: true,
+    initializer: null
+  }), _descriptor2 = _applyDecoratedDescriptor(_class2.prototype, 'currentFile', [_aureliaFramework.bindable], {
+    enumerable: true,
+    initializer: null
+  })), _class2)) || _class);
+});
+define('code-mirror',['exports'], function (exports) {
+  'use strict';
+
+  Object.defineProperty(exports, "__esModule", {
+    value: true
+  });
+
+  function _classCallCheck(instance, Constructor) {
+    if (!(instance instanceof Constructor)) {
+      throw new TypeError("Cannot call a class as a function");
+    }
+  }
+
+  var CodeMirrorService = exports.CodeMirrorService = function () {
+    function CodeMirrorService() {
+      _classCallCheck(this, CodeMirrorService);
+    }
+
+    CodeMirrorService.prototype.getInstance = function getInstance() {
+      this.instance = this.instance || CodeMirror(document.getElementById('code'), {
+        lineNumbers: true
+      });
+      return this.instance;
+    };
+
+    return CodeMirrorService;
+  }();
+});
+define('text!app.html', ['module'], function(module) { module.exports = "<template>\n  <require from=\"./style.css\"></require>\n  <require from=\"./resources/elements/file-browser\"></require>\n  <h3>Directory</h3>\n  <div class=\"dir\">\n    <file-browser data.bind=\"data\" current-file.bind=\"currentFile\"></file-browser>\n    <div id=\"code\"></div>\n    <div class=\"content-area\" if.bind=\"false\">\n      ${currentFile.content}\n    </div>\n  </div>\n</template>\n"; });
+define('text!style.css', ['module'], function(module) { module.exports = "body {\n  margin: 0;\n  padding: 0;\n}\n.dir {\n  display: flex;\n}\n.dir file-browser {\n  width: 200px;\n}\n"; });
+define('text!resources/elements/file-browser.html', ['module'], function(module) { module.exports = "<template>\n\t<require from=\"./file-browser\"></require>\n\t<ul>\n      <li repeat.for=\"item of data\">\n        <a href=\"\" click.trigger=\"getChildren(item)\">\n          ${item.name}\n        </a>\n\t\t<file-browser show.bind=\"item.open\" data.bind=\"item.children\" current-file.bind=\"currentFile\"></file-browser>\n      </li>\n    </ul>   \n</template>"; });
 //# sourceMappingURL=app-bundle.js.map
